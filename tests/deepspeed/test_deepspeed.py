@@ -36,9 +36,9 @@ from accelerate.test_utils.testing import (
     AccelerateTestCase,
     TempDirTestCase,
     execute_subprocess_async,
-    require_non_cpu,
     require_deepspeed,
     require_multi_device,
+    require_non_cpu,
     slow,
 )
 from accelerate.test_utils.training import RegressionDataset
@@ -693,9 +693,9 @@ class DeepSpeedConfigIntegration(AccelerateTestCase):
 
     def test_ds_config_assertions(self):
         ambiguous_env = self.dist_env.copy()
-        ambiguous_env[
-            "ACCELERATE_CONFIG_DS_FIELDS"
-        ] = "gradient_accumulation_steps,gradient_clipping,zero_stage,offload_optimizer_device,offload_param_device,zero3_save_16bit_model,mixed_precision"
+        ambiguous_env["ACCELERATE_CONFIG_DS_FIELDS"] = (
+            "gradient_accumulation_steps,gradient_clipping,zero_stage,offload_optimizer_device,offload_param_device,zero3_save_16bit_model,mixed_precision"
+        )
 
         with mockenv_context(**ambiguous_env):
             with self.assertRaises(ValueError) as cm:
@@ -908,8 +908,8 @@ class DeepSpeedIntegrationTest(TempDirTestCase):
                     ]
                 )
                 for i in range(3):
-                    if f"stage_{i+1}" in spec:
-                        cmd_stage.extend([f"--zero_stage={i+1}"])
+                    if f"stage_{i + 1}" in spec:
+                        cmd_stage.extend([f"--zero_stage={i + 1}"])
                         break
                 cmd_stage.extend(
                     [
